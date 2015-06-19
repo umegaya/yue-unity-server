@@ -1,0 +1,7 @@
+*.iso
+*.vmdk
+logs
+data
+build
+.yue
+.DS_Store
