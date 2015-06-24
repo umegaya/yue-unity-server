@@ -1,5 +1,6 @@
 local luact = require 'luact.init'
 local actor = require 'luact.actor'
+local cache = require 'engine.cacheref'
 local _M = {}
 
 local sweeper_mt = {}
@@ -14,8 +15,8 @@ end
 function sweeper_mt:start(field)
 	if not self.destroy_thread then
 		-- unregister this field (from scheduler)
-		local ref = luact.ref(field.UnregistUrl)
-		local ok, r = pcall(ref._close,ref,field.Vid)
+		local ref = cache.get(field.UnregistUrl)
+		local ok, r = pcall(ref._close, ref, field.Vid, field.Size)
 		if not ok then
 			logger.error(field.UnregistUrl, r.bt, r.args[1])
 		end
@@ -51,7 +52,7 @@ function sweeper_mt:start(field)
 			end
 			-- remove this field
 			scplog('field destroy', f.Vid)
-			actor.destroy(f.Actor)
+			luact.unregister(f.Vid)
 		end, field)
 	end
 end

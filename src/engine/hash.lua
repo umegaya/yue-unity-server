@@ -23,7 +23,7 @@ local function murmur3(p, len)
 	local m = 5
 	local n = 0xe6546b64
  
-	local hash = seed
+	local hash = ffi.new('uint32_t', seed)
  
 	local nblocks = bit.rshift(len, 2)
 	local blocks = ffi.cast('const uint32_t *', p)

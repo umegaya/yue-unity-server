@@ -15,8 +15,8 @@ function _M.new(url, field_data_json)
 	if not initialized then
 		local ret = ref.GET('/gamedata')
 		local status, headers, body, blen = ret:raw_payload()
-		local tmp = json.decode(ffi.string(body, blen))
-		ok, r = unpack(tmp)
+		local tmp = json.decode(ffi.string(body, blen)) 
+		ok, r = unpack(tmp) -- body will be [result, args1, args2, ...]
 		if not ok then
 			ret:fin()
 			goto finish
@@ -39,8 +39,11 @@ function _M.new(url, field_data_json)
 	if not ok then
 		goto finish
 	end
-	-- 	100 ms tick
+	-- TODO : garbage collection. 
+	-- if field not finished & no active user with defined duration, 
+	-- field finished autometically.
 	updater = luact.tentacle(function (f, last_update)
+		-- 100 ms tick (you need 30fps? really?)
 		while not f.Finished do
 			local now = luact.clock.get()
 			f:update(now - last_update)

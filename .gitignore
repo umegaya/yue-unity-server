@@ -4,4 +4,5 @@ logs
 data
 build
 .yue
+sync.sh
 .DS_Store

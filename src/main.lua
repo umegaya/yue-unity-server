@@ -14,6 +14,10 @@ luact.listen(url.websv) -- for web server emuration
 luact.register('/srv', {
 	multi_actor = true,
 }, './src/actor/srv.lua')
+-- matching actor
+luact.register('/queue', {
+	multi_actor = true,
+}, './src/actor/queue.lua')
 -- dummy webserver actor
 luact.register('/wsv', {
 	multi_actor = true,
