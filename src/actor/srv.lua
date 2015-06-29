@@ -12,7 +12,6 @@ local _M = {}
 local thread = luact.tentacle(function ()
 	luact.clock.sleep(1)
 	local a = actor.of(_M)
-	logger.warn('init gossip actor = ', a)
 	gossip.initialize(a)
 	while true do
 		local p = gossip.load_percentile()
@@ -38,6 +37,7 @@ local function do_register(pfx, file, baseurl, ...)
 	local ok, r
 	while true do
 		name = pfx.."/"..tonumber(sec).."_"..math.random(1, 1000000) -- time + random seed
+
 		ok, r = pcall(luact.register, name, file, baseurl..name, ...)
 		if ok then
 			break
@@ -89,6 +89,7 @@ end
 -- tcp interface
 function _M:_create(size, caller_websv_url, field_data_json)
 	local baseurl = url.game:gsub('0.0.0.0', luact.opts.env.external_address)
+	logger.info('create', baseurl)
 	local field_name, r = do_register("/gf", "src/actor/gf.lua", baseurl, caller_websv_url, url.sched_actor, field_data_json, size)
 	local ok, r = pcall(gossip.add_load_score, size)
 	if not ok then

@@ -51,8 +51,9 @@ function sweeper_mt:start(field)
 				luact.clock.sleep(1.0)
 			end
 			-- remove this field
+			local _, path = luact.util.devide_url_into_host_and_path(f.Vid)
 			scplog('field destroy', f.Vid)
-			luact.unregister(f.Vid)
+			luact.unregister(path)
 		end, field)
 	end
 end

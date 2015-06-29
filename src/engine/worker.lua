@@ -166,10 +166,14 @@ function worker_mt:_destroy()
 	if self.settings.field_data ~= nil then
 		memory.free(self.settings.field_data)
 	end
-	for i=0,self.n_qused-1 do
-		memory.free(self.queue[i].user_id)
-		memory.free(self.queue[i].user_data)
+	if self.queue ~= nil then
+		for i=0,self.n_qused-1 do
+			memory.free(self.queue[i].user_id)
+			memory.free(self.queue[i].user_data)
+		end
+		memory.free(self.queue)
 	end
+	memory.free(self)
 end
 function worker_mt:__actor_destroy__()
 	local name = ffi.string(self.name)

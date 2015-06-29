@@ -29,7 +29,7 @@ local function get_user_data(user_id)
 	if not user_data then
 		thread.lock_shared_memory('game_data', function (ptr, datas, id)
 			local data = ffi.cast('shared_game_data_t*', ptr)
-			local ud = ptr.user_data:Get(ffi.cast('char *', id))
+			local ud = data.user_data:Get(ffi.cast('char *', id))
 			user_data = ffi.string(ud)
 			datas[id] = user_data 
 		end, user_datas, user_id)
@@ -114,7 +114,7 @@ function _M.otp(verb, headers, body) -- (field_url, user_id)
 	local resp = ref.POST('/_genotp', {
 		field_url = payload[1],
 		user_id = payload[2], 
-		user_data_json = get_user_data(payload[3])
+		user_data_json = get_user_data(payload[2])
 	})
 	local status, headers, b, blen = resp:raw_payload()
 	local tmp = json.decode(ffi.string(b, blen))
